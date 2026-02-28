@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const SearchForm = ({ onSearch }) => {
   const [query, setQuery] = useState("");
@@ -7,21 +7,19 @@ const SearchForm = ({ onSearch }) => {
   const [sortBy, setSortBy] = useState("name");
   const [showFilters, setShowFilters] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Construir query params
+  // Función que hace la búsqueda con filtros opcionales
+  const fetchData = async (filters = {}) => {
     const params = new URLSearchParams();
-    if (query) params.append("name", query);
-    if (category) params.append("category", category);
-    if (type) params.append("format", type);
-    if (sortBy) params.append("orderBy", sortBy);
+    if (filters.query) params.append("name", filters.query);
+    if (filters.category) params.append("category", filters.category);
+    if (filters.type) params.append("format", filters.type);
+    if (filters.sortBy) params.append("orderBy", filters.sortBy);
 
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/files/search_files?${params.toString()}`);
+      const res = await fetch(
+        `http://localhost:8000/api/v1/files/search_files?${params.toString()}`
+      );
       const data = await res.json();
-
-      // Llamar al callback con los resultados
       onSearch?.(data);
     } catch (err) {
       console.error("Error buscando documentos:", err);
@@ -29,10 +27,19 @@ const SearchForm = ({ onSearch }) => {
     }
   };
 
+  // Ejecutar la primera vez al montar (sin filtros)
+  useEffect(() => {
+    fetchData({sortBy: "name"}); 
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetchData({ query, category, type, sortBy });
+  };
+
   return (
     <div className="container my-4">
       <form onSubmit={handleSubmit} className="card shadow-sm p-4">
-
         <h5 className="mb-3">Buscar documentos</h5>
 
         <div className="input-group mb-3">
@@ -57,11 +64,8 @@ const SearchForm = ({ onSearch }) => {
 
         {showFilters && (
           <div className="row g-3 mt-2">
-
             <div className="col-md-4">
-              <label className="form-label fw-semibold">
-                Formato de archivo
-              </label>
+              <label className="form-label fw-semibold">Formato de archivo</label>
               <select
                 className="form-select"
                 value={type}
@@ -72,13 +76,17 @@ const SearchForm = ({ onSearch }) => {
                 <option value="TXT">.txt</option>
                 <option value="CSV">.csv</option>
                 <option value="XLSX">.xlsx</option>
+                <option value="DOCX">.docx</option>
+                <option value="ODS">.ods</option>
+                <option value="ODT">.odt</option>
+                <option value="PNG">.png</option>
+                <option value="JPG">.jpg</option>
+                <option value="JPEG">.jpeg</option>
               </select>
             </div>
 
             <div className="col-md-4">
-              <label className="form-label fw-semibold">
-                Categoría
-              </label>
+              <label className="form-label fw-semibold">Categoría</label>
               <select
                 className="form-select"
                 value={category}
@@ -94,9 +102,7 @@ const SearchForm = ({ onSearch }) => {
             </div>
 
             <div className="col-md-4">
-              <label className="form-label fw-semibold">
-                Ordenar por
-              </label>
+              <label className="form-label fw-semibold">Ordenar por</label>
               <select
                 className="form-select"
                 value={sortBy}
@@ -108,10 +114,8 @@ const SearchForm = ({ onSearch }) => {
                 <option value="category">Categoría</option>
               </select>
             </div>
-
           </div>
         )}
-
       </form>
     </div>
   );
