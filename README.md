@@ -3,7 +3,7 @@ HackUDC 2026 project repository.
 
 
 
-## Instructions
+## Instructions
 1. Create virtual environment.
 ```
 python3 -m venv .venv
