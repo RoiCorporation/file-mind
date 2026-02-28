@@ -73,6 +73,12 @@ async def import_file(
     elif final_format == Format.PNG:
         final_name = final_name or (upload.filename or "untitled.png")
 
+    elif final_format == Format.JPG:
+        final_name = final_name or (upload.filename or "untitled.jpg")
+
+    elif final_format == Format.JPEG:
+        final_name = final_name or (upload.filename or "untitled.jpeg")
+
     if final_name is None:
         raise HTTPException(
             status_code=400, detail="Name is required (provide 'name' field or include it in file metadata).")
