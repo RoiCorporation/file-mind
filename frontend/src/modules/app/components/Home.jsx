@@ -4,8 +4,8 @@ import SearchForm from "../../search/components/SearchForm";
 import DocumentDrawer from "../../search/components/DocumentDrawer";
 
 const Home = () => {
-
   const [selectedDoc, setSelectedDoc] = useState(null);
+  const [results, setResults] = useState([]); // <- estado para los resultados
 
   const isOpen = !!selectedDoc;
 
@@ -18,14 +18,14 @@ const Home = () => {
           marginRight: isOpen ? "400px" : "0"
         }}
       >
-        <SearchForm />
-        <ResultTable onSelect={setSelectedDoc} />
+        <SearchForm onSearch={setResults} />
+        <ResultTable results={results} onSelect={setSelectedDoc} />
       </div>
+
       <DocumentDrawer
         document={selectedDoc}
         onClose={() => setSelectedDoc(null)}
       />
-
     </div>
   );
 };

@@ -1,15 +1,32 @@
 import { useState } from "react";
 
 const SearchForm = ({ onSearch }) => {
-
   const [query, setQuery] = useState("");
-  const [type, setType] = useState("PDF");
-  const [category, setCategory] = useState("Legal");
-  const [sortBy, setSortBy] = useState("date");
+  const [type, setType] = useState("");
+  const [category, setCategory] = useState("");
+  const [sortBy, setSortBy] = useState("name");
+  const [showFilters, setShowFilters] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSearch?.({ query, type, category, sortBy });
+
+    // Construir query params
+    const params = new URLSearchParams();
+    if (query) params.append("name", query);
+    if (category) params.append("category", category);
+    if (type) params.append("format", type);
+    if (sortBy) params.append("orderBy", sortBy);
+
+    try {
+      const res = await fetch(`http://localhost:8000/api/v1/files/search_files?${params.toString()}`);
+      const data = await res.json();
+
+      // Llamar al callback con los resultados
+      onSearch?.(data);
+    } catch (err) {
+      console.error("Error buscando documentos:", err);
+      onSearch?.([]);
+    }
   };
 
   return (
@@ -18,71 +35,83 @@ const SearchForm = ({ onSearch }) => {
 
         <h5 className="mb-3">Buscar documentos</h5>
 
-        <div className="row g-3">
-
-          <div className="col-12">
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Buscar por palabra clave, título, contenido..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              <button className="btn btn-primary" type="submit">
-                Buscar
-              </button>
-            </div>
-          </div>
-
-          <div className="col-md-4">
-            <label className="form-label fw-semibold">
-              Tipo de archivo
-            </label>
-            <select
-              className="form-select"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-            >
-              <option value="PDF">.pdf</option>
-              <option value="TXT">.txt</option>
-              <option value="CSV">.csv</option>
-              <option value="XLSX">.xlsx</option>
-            </select>
-          </div>
-
-          <div className="col-md-4">
-            <label className="form-label fw-semibold">
-              Categoría
-            </label>
-            <select
-              className="form-select"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              <option value="Legal">Legal</option>
-              <option value="Finance">Finanzas</option>
-              <option value="Report">Informe</option>
-              <option value="Certificate">Certificado</option>
-              <option value="Unknown">N/A</option>
-            </select>
-          </div>
-
-          <div className="col-md-4">
-            <label className="form-label fw-semibold">
-              Ordenar por
-            </label>
-            <select
-              className="form-select"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="date">Fecha</option>
-              <option value="title">Título</option>
-            </select>
-          </div>
-
+        <div className="input-group mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Buscar por palabra clave, título, contenido..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button className="btn btn-primary" type="submit">
+            Buscar
+          </button>
+          <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            {showFilters ? "Ocultar filtros" : "Más filtros"}
+          </button>
         </div>
+
+        {showFilters && (
+          <div className="row g-3 mt-2">
+
+            <div className="col-md-4">
+              <label className="form-label fw-semibold">
+                Formato de archivo
+              </label>
+              <select
+                className="form-select"
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+              >
+                <option value="">Selecciona formato</option>
+                <option value="PDF">.pdf</option>
+                <option value="TXT">.txt</option>
+                <option value="CSV">.csv</option>
+                <option value="XLSX">.xlsx</option>
+              </select>
+            </div>
+
+            <div className="col-md-4">
+              <label className="form-label fw-semibold">
+                Categoría
+              </label>
+              <select
+                className="form-select"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option value="">Selecciona categoría</option>
+                <option value="Legal">Legal</option>
+                <option value="Finance">Finanzas</option>
+                <option value="Report">Informe</option>
+                <option value="Certificate">Certificado</option>
+                <option value="Unknown">N/A</option>
+              </select>
+            </div>
+
+            <div className="col-md-4">
+              <label className="form-label fw-semibold">
+                Ordenar por
+              </label>
+              <select
+                className="form-select"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <option value="name">Título</option>
+                <option value="format">Formato</option>
+                <option value="author">Autor</option>
+                <option value="category">Categoría</option>
+              </select>
+            </div>
+
+          </div>
+        )}
+
       </form>
     </div>
   );
