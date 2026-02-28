@@ -2,4 +2,18 @@
 name = "file-mind"
 version = "0.1.0"
 dependencies = [
+    "fastapi",
+    "fastapi[standard]",
+    "sqlalchemy",
+    "psycopg2-binary",
+    "uvicorn",
+    "pydantic-settings",
+    "passlib[bcrypt]",
+    "python-jose[cryptography]",
+    "python-multipart",
+    "pypdf",
+    "openpyxl",
+    "python-docx",
+    "odfpy",
+    "pillow"
 ]

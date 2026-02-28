@@ -18,3 +18,8 @@ source .venv/bin/activate
 ```
 pip install -e .
 ```
+
+4. Run the backend from inside the [backend folder](backend).
+```
+uvicorn app.main:app --reload --port 8000
+```
