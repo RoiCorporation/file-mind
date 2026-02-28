@@ -1,3 +1,4 @@
+import json
 from fastapi import Query, APIRouter, Depends, UploadFile, File as FastAPIFile, Form, HTTPException
 from sqlalchemy import or_, and_, asc, desc
 from sqlalchemy.orm import Session
@@ -6,7 +7,6 @@ from app.models.file import File as FileModel
 from app.schemas.file import FileRead
 from app.enums.format import Format, parse_format
 from app.enums.category import parse_category
-import json
 from app.services.extractor import extract_content_and_meta
 from datetime import datetime
 
@@ -63,6 +63,9 @@ async def import_file(
 
     elif final_format == Format.XLSX:
         final_name = final_name or (upload.filename or "untitled.xlsx")
+
+    elif final_format == Format.CSV:
+        final_name = final_name or (upload.filename or "untitled.csv")
 
     elif final_format == Format.ODS:
         final_name = final_name or (upload.filename or "untitled.ods")
