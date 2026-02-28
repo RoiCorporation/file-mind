@@ -8,7 +8,7 @@ const App = () => {
     return(
         <>
             <Header/>
-            <main>
+            <main style={{ minHeight: "calc(100vh - 60px)" }}>
                 <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/upload" element={<UploadFile/>}/>

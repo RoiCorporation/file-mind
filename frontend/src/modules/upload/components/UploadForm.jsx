@@ -16,17 +16,28 @@ const UploadForm = () => {
     setExtension(ext);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) return;
 
     const format = extension ? extension.toUpperCase() : "UNKNOWN";
 
-    console.log({
-      file,
-      category,
-      format
-    });
+    const formData = new FormData();
+    formData.append("upload", file);      // <-- aquí va 'upload'
+    formData.append("category", category);
+    formData.append("format", format);
+
+    try {
+      const res = await fetch("http://localhost:8000/api/v1/files/import_file/", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      console.log(data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
