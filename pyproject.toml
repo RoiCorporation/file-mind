@@ -1,3 +1,10 @@
+[tool.setuptools]
+package-dir = {"" = "backend"}
+
+[tool.setuptools.packages.find]
+where = ["backend"]
+include = ["app*"]
+
 [project]
 name = "file-mind"
 version = "0.1.0"
@@ -15,5 +22,6 @@ dependencies = [
     "openpyxl",
     "python-docx",
     "odfpy",
-    "pillow"
+    "pillow",
+    "openai"
 ]
