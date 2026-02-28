@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres-filemind
+    restart: always
+    environment:
+      POSTGRES_USER: filedata
+      POSTGRES_PASSWORD: filedata
+      POSTGRES_DB: filedata
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
