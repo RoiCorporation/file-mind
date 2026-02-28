@@ -3,7 +3,16 @@ HackUDC 2026 project repository.
 
 
 
-## Instructions
+
+## Installing the packages
+1. Configure the OpenAI API key.
+````
+export OPENAI_API_KEY="<your_api_key>"
+````
+
+
+
+## Running the app
 1. Create virtual environment.
 ```
 python3 -m venv .venv

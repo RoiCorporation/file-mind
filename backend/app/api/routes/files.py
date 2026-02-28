@@ -117,7 +117,7 @@ def retrieve_all_files(db: Session = Depends(get_db)):
     return files
 
 
-@router.get("/search_files", response_model=list[FileRead])
+@router.get("/search_files/", response_model=list[FileRead])
 def search_files(
     db: Session = Depends(get_db),
     format: str | None = Query(None),
