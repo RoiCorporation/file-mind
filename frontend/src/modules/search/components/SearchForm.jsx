@@ -7,14 +7,6 @@ const SearchForm = ({ onSearch }) => {
   const [sortBy, setSortBy] = useState("name");
   const [showFilters, setShowFilters] = useState(false);
 
-  const parsePdfDate = (pdfDate) => {
-    if (!pdfDate) return "—";
-    const match = pdfDate.match(/^D:(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/);
-    if (!match) return pdfDate; // si no coincide, devolvemos crudo
-    const [, year, month, day, hour, minute, second] = match;
-    return `${day}/${month}/${year} ${hour}:${minute}`;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 

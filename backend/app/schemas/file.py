@@ -13,6 +13,7 @@ class FileCreate(BaseModel):
 
 
 class FileRead(BaseModel):
+    id: int
     name: str
     format: str
     category: str
