@@ -1,5 +1,5 @@
 # FileMind
-HackUDC 2026 project repository.
+Repository for our HackUDC 2026 project.
 
 
 
