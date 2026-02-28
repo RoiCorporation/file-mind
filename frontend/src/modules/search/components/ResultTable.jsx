@@ -78,7 +78,7 @@ const ResultTable = ({ results, onSelect }) => {
       name: "Plan Estratégico 2026",
       author: "Dirección General",
       category: "Estrategia",
-      format: "pdf",
+      format: "PDF",
       content: "Documento estratégico con visión a tres años, objetivos corporativos, expansión internacional y transformación digital..."
     }
   ];
