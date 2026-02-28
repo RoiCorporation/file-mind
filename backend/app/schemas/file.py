@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class FileCreate(BaseModel):
@@ -7,7 +8,8 @@ class FileCreate(BaseModel):
     category: str
     author: str | None = None
     content: str | None = None
-    file_metadata: dict | None = None
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
 
 
 class FileRead(BaseModel):
@@ -17,6 +19,8 @@ class FileRead(BaseModel):
     author: str | None = None
     content: str | None = None
     file_metadata: dict | None = None
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
 
     class Config:
         orm_mode = True

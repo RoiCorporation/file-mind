@@ -8,6 +8,7 @@ from app.enums.format import Format, parse_format
 from app.enums.category import parse_category
 import json
 from app.services.extractor import extract_content_and_meta
+from datetime import datetime
 
 
 router = APIRouter(prefix="/files", tags=["files"])
@@ -102,7 +103,9 @@ async def import_file(
         author=final_author,
         category=final_category.value,
         content=final_content,
-        file_metadata=meta_to_store if meta_to_store else None,
+        created_at=datetime.now(),
+        updated_at=datetime.now(),
+        file_metadata=meta_to_store if meta_to_store else None
     )
 
     db.add(new_file)
@@ -117,7 +120,7 @@ def retrieve_all_files(db: Session = Depends(get_db)):
     return files
 
 
-@router.get("/search_files", response_model=list[FileRead])
+@router.get("/search_files/", response_model=list[FileRead])
 def search_files(
     db: Session = Depends(get_db),
     format: str | None = Query(None),
