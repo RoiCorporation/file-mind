@@ -2,11 +2,31 @@ import { useState } from "react";
 
 const UploadForm = () => {
   const [file, setFile] = useState(null);
+  const [category, setCategory] = useState("UNKNOWN");
+  const [extension, setExtension] = useState("");
+
+  const handleFileChange = (e) => {
+    const selected = e.target.files[0];
+    if (!selected) return;
+
+    setFile(selected);
+
+    // Detectar extensión
+    const ext = selected.name.split(".").pop().toLowerCase();
+    setExtension(ext);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!file) return;
-    console.log("Archivo seleccionado:", file);
+
+    const format = extension ? extension.toUpperCase() : "UNKNOWN";
+
+    console.log({
+      file,
+      category,
+      format
+    });
   };
 
   return (
@@ -22,13 +42,31 @@ const UploadForm = () => {
           <input
             type="file"
             className="form-control form-control-lg"
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={handleFileChange}
           />
         </div>
 
         {file && (
-          <p className="text-success mb-3">Archivo: {file.name}</p>
+          <>
+            <p className="text-success mb-2">Archivo: {file.name}</p>
+            <p className="text-muted small mb-3">
+              Extensión detectada: .{extension}
+            </p>
+          </>
         )}
+
+        <div className="mb-4">
+          <select
+            className="form-select form-select-lg"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="Legal">Legal</option>
+            <option value="Finance">Finanzas</option>
+            <option value="Report">Informe</option>
+            <option value="Unknown">N/A</option>
+          </select>
+        </div>
 
         <button type="submit" className="btn btn-primary btn-lg w-100">
           Subir
