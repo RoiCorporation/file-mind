@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, UploadFile, File as FastAPIFile, Form, HTTPException
+from fastapi import Query, APIRouter, Depends, UploadFile, File as FastAPIFile, Form, HTTPException
+from sqlalchemy import or_, and_, asc, desc
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.file import File as FileModel
@@ -114,3 +115,70 @@ async def import_file(
 def retrieve_all_files(db: Session = Depends(get_db)):
     files = db.query(FileModel).all()
     return files
+
+
+@router.get("/search_files", response_model=list[FileRead])
+def search_files(
+    db: Session = Depends(get_db),
+    format: str | None = Query(None),
+    name: str | None = Query(None),
+    category: str | None = Query(None),
+    keywords: str | None = Query(None, description="Search in name/content"),
+    orderBy: str | None = Query("created_at"),  # change default if you want
+    order: str = Query("desc", pattern="^(asc|desc)$"),
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+):
+
+    query = db.query(FileModel)
+
+    if name:
+        name_like = f"%{name}%"
+        query = query.filter(FileModel.name.ilike(name_like))
+
+    if format:
+        fmt = parse_format(format_str=format)
+        if not fmt:
+            raise HTTPException(
+                status_code=400, detail=f"Unsupported format: {format}")
+        query = query.filter(FileModel.format == fmt.acronym)
+
+    if category:
+        cat = parse_category(category_str=category)
+        if not cat:
+            raise HTTPException(
+                status_code=400, detail=f"Unsupported category: {category}")
+        query = query.filter(FileModel.category == cat.value)
+
+    if keywords:
+        keyword_filters = []
+        for word in keywords:
+            like = f"%{word}%"
+            keyword_filters.append(
+                or_(
+                    FileModel.name.ilike(like),
+                    FileModel.content.ilike(like),
+                    FileModel.file_metadata["title"].astext.ilike(like),
+                    FileModel.file_metadata["author"].astext.ilike(like),
+                )
+            )
+        query = query.filter(and_(*keyword_filters))
+
+    order_map = {
+        "name": FileModel.name,
+        "format": FileModel.format,
+        "category": FileModel.category,
+        "author": FileModel.author,
+    }
+
+    sort_column = order_map.get(orderBy)
+    if not sort_column:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported orderBy. Allowed: {', '.join(order_map.keys())}"
+        )
+
+    query = query.order_by(asc(sort_column) if order ==
+                           "asc" else desc(sort_column))
+
+    return query.all()
