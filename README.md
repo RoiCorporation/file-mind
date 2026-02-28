@@ -24,7 +24,7 @@ pip install -e .
 export OPENAI_API_KEY="<your_api_key>"
 ````
 
-5. Install npm.
+5. Install npm from inside the [frontend folder](/frontend/).
 ```
 npm install
 ```
