@@ -37,8 +37,9 @@ npm install
 uvicorn app.main:app --reload --port 8000
 ```
 
-- Run the frontend from inside the [frontend folder](/frontend/).
+- Build and run the frontend from inside the [frontend folder](/frontend/).
 ```
+npm run build
 npm run dev
 ```
 
