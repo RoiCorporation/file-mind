@@ -5,9 +5,14 @@ package-dir = {"" = "backend"}
 where = ["backend"]
 include = ["app*"]
 
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "file-mind"
 version = "0.1.0"
+requires-python = ">=3.11,<3.15"
 dependencies = [
     "fastapi",
     "fastapi[standard]",
