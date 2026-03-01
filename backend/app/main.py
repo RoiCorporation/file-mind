@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.router import router as api_router
 from app.db.init_db import init_db
 
+
 origins = [
     "http://localhost:5173",
     "http://localhost:3000",
