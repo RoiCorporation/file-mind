@@ -9,7 +9,7 @@ origins = [
     "http://localhost:3000",
 ]
 
-app = FastAPI(title="My App API")
+app = FastAPI(title="FileMind API", version="1.0")
 app.include_router(api_router, prefix="/v1")
 app.add_middleware(
     CORSMiddleware,
@@ -23,3 +23,8 @@ app.add_middleware(
 @app.on_event("startup")
 def on_startup():
     init_db()
+
+
+@app.get("/ping")
+def ping():
+    return {"pong": True}
