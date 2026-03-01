@@ -31,7 +31,7 @@ npm install
 
 
 
-## 🚀 Running the app
+## 🚀 Running the app locally
 - Run the backend from inside the [backend folder](/backend/).
 ```
 uvicorn app.main:app --reload --port 8000
@@ -41,3 +41,9 @@ uvicorn app.main:app --reload --port 8000
 ```
 npm run dev
 ```
+
+
+
+## 🌐 Deployed app
+This application is deployed with Vercel through 
+[this link](https://file-mind-lx56.vercel.app/).
