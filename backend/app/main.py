@@ -33,8 +33,3 @@ def on_startup():
         # don't crash in Vercel
         if os.getenv("VERCEL") != "1":
             raise
-
-
-@app.get("/ping")
-def ping():
-    return {"pong": True}
