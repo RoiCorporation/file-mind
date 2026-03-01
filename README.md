@@ -1,5 +1,5 @@
-# FileMind
-Repository for our HackUDC 2026 project.
+![logo](/FileMind%20logo.png)
+**FileMind** is a file manager that brings top search possibilities. Metadata analysis, exhaustive filtering and searching, AI-generated file summaries... Welcome to the next generation of file managers.
 
 
 
