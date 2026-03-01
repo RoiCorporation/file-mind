@@ -38,9 +38,7 @@ const DocumentDrawer = ({ document, onClose }) => {
     setSummary(null);
 
     try {
-      const res = await fetch(
-        "/api/v1/ai/file_summary/",
-        {
+      const res = await fetch(`${API_BASE}/v1/ai/file_summary/?${params.toString()}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

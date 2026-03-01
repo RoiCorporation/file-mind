@@ -27,7 +27,7 @@ const UploadForm = () => {
     formData.append("format", format);
 
     try {
-      const res = await fetch("/api/v1/files/import_file/", {
+      const res = await fetch(`${API_BASE}/v1/files/import_files/?${params.toString()}`, {
         method: "POST",
         body: formData,
       });
