@@ -39,8 +39,8 @@ def file_summary(payload: FileSummaryRequest, db: Session = Depends(get_db)):
     question = f"""
         Give a summary of the file content and metadata. "
         "Not smaller than 300 characters, not longer than {MAX_CHARS} characters.
-        Answer in the same language as the file content. If the content is not in 
-        a natural language, answer in English.
+        Answer in the same language as the user's browser setting. If the content is 
+        not in a natural language, answer in English.
     """
 
     prompt = (
