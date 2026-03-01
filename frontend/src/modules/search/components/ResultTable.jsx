@@ -33,7 +33,7 @@ const ResultTable = ({ results, onSelect }) => {
                 </tr>
               </thead>
               <tbody>
-                {results.map((doc, idx) => (
+                {(Array.isArray(results) ? results : []).map((doc, idx) => (
                   <tr
                     key={idx}
                     style={{ cursor: "pointer" }}
