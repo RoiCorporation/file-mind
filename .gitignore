@@ -14,7 +14,8 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+frontend/src/lib/*
+!frontend/src/lib/api.js
 lib64/
 parts/
 sdist/
