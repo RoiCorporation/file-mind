@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_BASE } from "@/lib/api";
 
 const DocumentDrawer = ({ document, onClose }) => {
   const [summary, setSummary] = useState(null);

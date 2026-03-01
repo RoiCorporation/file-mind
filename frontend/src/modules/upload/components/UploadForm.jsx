@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE } from "@/lib/api";
 
 const UploadForm = () => {
   const [file, setFile] = useState(null);
