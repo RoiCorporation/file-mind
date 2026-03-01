@@ -9,6 +9,8 @@ from app.db.init_db import init_db
 origins = [
     "http://localhost:5173",
     "http://localhost:3000",
+    "https://file-mind-lx56.vercel.app",
+    "https://file-mind.vercel.app",
 ]
 
 app = FastAPI(title="FileMind API", version="1.0")
