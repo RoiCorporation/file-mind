@@ -19,6 +19,8 @@ dependencies = [
     "python-jose[cryptography]",
     "python-multipart",
     "pypdf",
+    "pytesseract",
+    "pymupdf",
     "openpyxl",
     "python-docx",
     "odfpy",

@@ -2,10 +2,13 @@ from fastapi import HTTPException
 from typing import Callable
 from app.enums.format import Format
 from pypdf import PdfReader
+import fitz
+from PIL import Image
+import pytesseract
 import csv
+import docx
 import io
 from io import StringIO
-import docx
 from io import BytesIO
 from odf.opendocument import load
 from odf.table import Table, TableRow, TableCell
@@ -42,19 +45,35 @@ def extract_pdf_text_and_meta(data: bytes) -> tuple[str, dict]:
         text = "\n".join((page.extract_text() or "") for page in reader.pages)
 
         raw_meta = reader.metadata or {}
-
         def norm_key(k: str) -> str:
-            return k.lstrip("/").lower()
+            return str(k).lstrip("/").lower()
 
-        meta = {norm_key(str(k)): (str(v) if v is not None else None)
-                for k, v in raw_meta.items()}
-        meta.update({"pages": len(reader.pages),
-                    "encrypted": bool(reader.is_encrypted)})
+        meta = {norm_key(k): (str(v) if v is not None else None) for k, v in raw_meta.items()}
+        meta.update({"pages": len(reader.pages), "encrypted": bool(reader.is_encrypted)})
+
+        # If no embedded text, try OCR.
+        if not text.strip():
+            doc = fitz.open(stream=data, filetype="pdf")
+
+            ocr_chunks = []
+            for i, page in enumerate(doc):
+                pix = page.get_pixmap(dpi=300)
+
+                # Convert pixmap to PNG bytes in-memory.
+                png_bytes = pix.tobytes("png")
+                img = Image.open(io.BytesIO(png_bytes))
+
+                # OCR.
+                ocr_chunks.append(
+                    pytesseract.image_to_string(img, lang="eng")
+                )
+
+            text = "\n".join(ocr_chunks)
+
         return text, meta
-    except Exception as e:
-        raise HTTPException(
-            status_code=400, detail=f"PDF extraction failed: {e}")
 
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"PDF extraction failed: {type(e).__name__}: {e}")
 
 def extract_txt_text_and_meta(data: bytes) -> tuple[str, dict]:
     # best-effort decode
