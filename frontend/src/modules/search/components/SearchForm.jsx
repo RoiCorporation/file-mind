@@ -17,10 +17,11 @@ const SearchForm = ({ onSearch }) => {
     if (filters.sortBy) params.append("orderBy", filters.sortBy);
 
     try {
-      const res = await fetch(`${API_BASE}/v1/files/import_file/`, {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch(`${API_BASE}/v1/files/search_files/?${params.toString()}`);
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`Search failed (${res.status}): ${text}`);
+      }
       const data = await res.json();
       onSearch?.(data);
     } catch (err) {
