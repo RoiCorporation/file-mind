@@ -14,6 +14,12 @@ from datetime import datetime
 router = APIRouter(prefix="/files", tags=["files"])
 
 
+@router.get("/", response_model=list[FileRead])
+def retrieve_all_files(db: Session = Depends(get_db)):
+    files = db.query(FileModel).all()
+    return files
+
+
 @router.post("/import_file/", response_model=FileRead)
 async def import_file(
     name: str | None = Form(None),
@@ -123,12 +129,6 @@ async def import_file(
     return new_file
 
 
-@router.get("/", response_model=list[FileRead])
-def retrieve_all_files(db: Session = Depends(get_db)):
-    files = db.query(FileModel).all()
-    return files
-
-
 @router.get("/search_files/", response_model=list[FileRead])
 def search_files(
     db: Session = Depends(get_db),
@@ -164,7 +164,7 @@ def search_files(
 
     if keywords:
         keyword_filters = []
-        for word in keywords:
+        for word in keywords.split():
             like = f"%{word}%"
             keyword_filters.append(
                 or_(
