@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./Home";
 import Footer from "./Footer";
 import UploadFile from '../../upload/components/UploadFile'
-import { API_BASE } from "../../../lib/api";
+import { API_BASE } from "@/lib/api";
 
 
 const App = () => {
