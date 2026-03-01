@@ -17,7 +17,7 @@ const SearchForm = ({ onSearch }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/api/v1/files/search_files?${params.toString()}`
+        `/api/v1/files/search_files?${params.toString()}`
       );
       const data = await res.json();
       onSearch?.(data);

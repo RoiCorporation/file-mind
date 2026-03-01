@@ -27,12 +27,16 @@ const UploadForm = () => {
     formData.append("format", format);
 
     try {
-      const res = await fetch("http://localhost:8000/api/v1/files/import_file/", {
+      const res = await fetch("/api/v1/files/import_file/", {
         method: "POST",
         body: formData,
       });
 
-      if (!res.ok) throw new Error("Error al subir");
+      if (!res.ok) {
+          const text = await res.text();
+          console.error("Upload failed:", res.status, res.statusText, text);
+          throw new Error(`Error al subir (${res.status})`);
+      }
       await res.json();
 
       setShowToast(true); // mostramos el popup

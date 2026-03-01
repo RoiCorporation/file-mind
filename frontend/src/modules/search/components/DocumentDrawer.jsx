@@ -39,7 +39,7 @@ const DocumentDrawer = ({ document, onClose }) => {
 
     try {
       const res = await fetch(
-        "http://localhost:8000/api/v1/ai/file_summary/",
+        "/api/v1/ai/file_summary/",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -54,7 +54,7 @@ const DocumentDrawer = ({ document, onClose }) => {
 
       const data = await res.json();
 
-      // 👇 aquí estaba tu fallo
+
       setSummary(data.answer ?? data.summary ?? "Sin resumen");
     } catch (err) {
       console.error(err);

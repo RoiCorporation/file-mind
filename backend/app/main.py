@@ -10,7 +10,7 @@ origins = [
 ]
 
 app = FastAPI(title="My App API")
-app.include_router(api_router, prefix="/api/v1")
+app.include_router(api_router, prefix="/v1")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
