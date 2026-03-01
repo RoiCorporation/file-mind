@@ -1,4 +1,4 @@
-![logo](/FileMind%20logo.png)
+![FileMind logo](/filemind-logo.png)
 **FileMind** is a file manager that ships top search possibilities. Metadata analysis, exhaustive filtering and searching, AI-generated file summaries... Welcome to the next generation of file managers.
 
 
