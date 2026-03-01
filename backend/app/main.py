@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.router import router as api_router
@@ -22,7 +24,13 @@ app.add_middleware(
 
 @app.on_event("startup")
 def on_startup():
-    init_db()
+    try:
+        init_db()
+    except Exception as e:
+        print("init_db failed:", repr(e))
+        # don't crash in Vercel
+        if os.getenv("VERCEL") != "1":
+            raise
 
 
 @app.get("/ping")
